@@ -1,51 +1,30 @@
 import Express from 'express'
 import {
+    queryGetProductos,
+    queryPostProductos
+} from '../../controlllers/productos/productoControllers.js';
+import {
     getDB
 } from '../../db/db.js'
 
-const rutasProducto = Express.Router(); 
+const rutasProducto = Express.Router();
+
+const genericCallback = (res) => (err, result) => {
+    if (err) {
+        console.error(err);
+        res.status(400).send('Error consultando los vehiculos');
+    } else {
+        console.log(result);
+        res.json(result);
+    }
+};
 
 rutasProducto.route('/productos').get((req, res) => {
-    const conexion = getDB();
-    conexion.collection('productos').find({}) /* .limit(50) */ .toArray((err, result) => { //liimt para tener solo 50 registros. find es la operacion
-        if (err) {
-            console.error(err);
-            res.status(400).send('Error consultando los vehiculos');
-        } else {
-            console.log(result);
-            res.json(result);
-        }
-    });
+    queryGetProductos(genericCallback(res));
 });
 
 rutasProducto.route('/productos/nuevo').post((req, res) => {
-    const datosProducto = req.body;
-    console.log('producto a crear: ', req.body) //me muestra la info del producto a crear
-    console.log("llaves: ", Object.keys(datosProducto)); //me muestra las llaves del producto a crear
-
-    try {
-        if (
-            Object.keys(datosProducto).includes('_id') &&
-            Object.keys(datosProducto).includes('descripcion') &&
-            Object.keys(datosProducto).includes('valorUnitario') &&
-            Object.keys(datosProducto).includes('estado')) {
-
-            const conexion = getDB();
-            conexion.collection('productos').insertOne(datosProducto, (err, result) => {
-                if (err) {
-                    console.error(err);
-                    res.status(500).send('Error agregando el producto');
-                } else {
-                    console.log(result);
-                    res.sendStatus(200);
-                }
-            });
-        } else {
-            res.sendStatus(500);
-        }
-    } catch (error) {
-        res.sendStatus(500);
-    }
+    queryPostProductos(req.body, genericCallback(res));
 });
 
 rutasProducto.route('/productos/editar').patch((req, res) => {

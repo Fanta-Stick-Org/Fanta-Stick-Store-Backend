@@ -9,8 +9,8 @@ import {
     conectarDB,
     getDB
 } from './db/db.js'
-import rutasProducto from "./views/productos/rutas.js";
-import rutasUsuario from "./views/usuarios/rutas.js";
+import rutasProducto from "./views/productos/productoRutas.js";
+import rutasUsuario from "./views/usuarios/usuarioRutas.js";
 
 dotenv.config({
     path: './.env'
