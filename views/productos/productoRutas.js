@@ -22,16 +22,16 @@ rutasProducto.route('/productos').get((req, res) => {
     queryGetProductos(genericCallback(res));
 });
 
-rutasProducto.route('/productos/nuevo').post((req, res) => {
+rutasProducto.route('/productos').post((req, res) => {
     queryPostProductos(req.body, genericCallback(res));
 });
 
-rutasProducto.route('/productos/editar').patch((req, res) => {
-    queryPatchProductos(req.body, genericCallback(res));
+rutasProducto.route('/productos/:id').patch((req, res) => {
+    queryPatchProductos(req.params.id, req.body, genericCallback(res));
 });
 
-rutasProducto.route('/productos/eliminar').delete((req, res) => {
-    queryDeleteProductos(req.body, genericCallback(res));
+rutasProducto.route('/productos/:id').delete((req, res) => {
+    queryDeleteProductos(req.params.id, genericCallback(res));
 });
 
 export default rutasProducto

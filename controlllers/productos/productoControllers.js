@@ -24,9 +24,9 @@ const queryPostProductos = async (datosProducto, callback) => {
     }
 };
 
-const queryPatchProductos = async (edicion, /*  ,*/ callback) => {
+const queryPatchProductos = async (id, edicion, /*  ,*/ callback) => {
     const filtroProducto = {
-        _id: edicion._id //_id: new ObjectId(edicion.id) cuando es el id por defecto
+        _id: id //_id: new ObjectId(edicion.id) cuando es el id por defecto
     };
     //delete edicion._id; //se usa cuando enviamos el id por el body o usamos el id por defecto de mongo
     const operacion = {
@@ -41,11 +41,12 @@ const queryPatchProductos = async (edicion, /*  ,*/ callback) => {
         }, callback);
 }
 
-const queryDeleteProductos = async (edicion, callback) => {
+const queryDeleteProductos = async (id, callback) => {
     const filtroProducto = {
-        _id: edicion._id //_id: new ObjectId(edicion.id) cuando es el id por defecto
+        _id: id //_id: new ObjectId(edicion.id) cuando es el id por defecto
     };
-    //delete edicion._id; //se usa cuando enviamos el id por el body o usamos el id por defecto de mongo
+    //delete edicion._id;   //se usa cuando enviamos el id por el body o usamos el id por defecto de mongo
+                            //esto no se hace si usamos rutas dinamicas con id en la url
 
     const conexion = getDB();
     await conexion.collection('productos').deleteOne(filtroProducto, callback);
