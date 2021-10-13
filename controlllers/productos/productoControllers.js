@@ -24,7 +24,7 @@ const queryPostProductos = async (datosProducto, callback) => {
     }
 };
 
-const queryPatchProductos = async (edicion, /*  ,*/callback) => {
+const queryPatchProductos = async (edicion, /*  ,*/ callback) => {
     const filtroProducto = {
         _id: edicion._id //_id: new ObjectId(edicion.id) cuando es el id por defecto
     };
@@ -35,12 +35,25 @@ const queryPatchProductos = async (edicion, /*  ,*/callback) => {
     const conexion = getDB();
     await conexion
         .collection('productos')
-        .findOneAndUpdate(filtroProducto, operacion, {upsert: true, returnOriginal: true}, callback);
+        .findOneAndUpdate(filtroProducto, operacion, {
+            upsert: true,
+            returnOriginal: true
+        }, callback);
 }
 
+const queryDeleteProductos = async (edicion, callback) => {
+    const filtroProducto = {
+        _id: edicion._id //_id: new ObjectId(edicion.id) cuando es el id por defecto
+    };
+    //delete edicion._id; //se usa cuando enviamos el id por el body o usamos el id por defecto de mongo
+
+    const conexion = getDB();
+    await conexion.collection('productos').deleteOne(filtroProducto, callback);
+}
 
 export {
     queryGetProductos,
     queryPostProductos,
-    queryPatchProductos
+    queryPatchProductos,
+    queryDeleteProductos
 };
