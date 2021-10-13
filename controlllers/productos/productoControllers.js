@@ -1,10 +1,11 @@
 import {
     getDB
 } from '../../db/db.js'
+/* import { ObjectId } from 'mongodb'; */ //para obtener el id defecto de mongo
 
 const queryGetProductos = async (callback) => {
     const conexion = getDB();
-    conexion.collection('productos').find({}) /* .limit(50) */ .toArray(callback); //limit para tener solo 50 registros. find es la operacion                       
+    await conexion.collection('productos').find({}) /* .limit(50) */ .toArray(callback); //limit para tener solo 50 registros. find es la operacion                       
 }
 
 const queryPostProductos = async (datosProducto, callback) => {
@@ -17,14 +18,29 @@ const queryPostProductos = async (datosProducto, callback) => {
         Object.keys(datosProducto).includes('estado')) {
 
         const conexion = getDB();
-        conexion.collection('productos').insertOne(datosProducto, callback);
+        await conexion.collection('productos').insertOne(datosProducto, callback);
     } else {
         return 'error';
     }
 };
 
+const queryPatchProductos = async (edicion, /*  ,*/callback) => {
+    const filtroProducto = {
+        _id: edicion._id //_id: new ObjectId(edicion.id) cuando es el id por defecto
+    };
+    //delete edicion._id; //se usa cuando enviamos el id por el body o usamos el id por defecto de mongo
+    const operacion = {
+        $set: edicion
+    };
+    const conexion = getDB();
+    await conexion
+        .collection('productos')
+        .findOneAndUpdate(filtroProducto, operacion, {upsert: true, returnOriginal: true}, callback);
+}
+
 
 export {
     queryGetProductos,
-    queryPostProductos
+    queryPostProductos,
+    queryPatchProductos
 };
