@@ -8,8 +8,11 @@ import {
     MongoClient,
     ObjectId
 } from "mongodb";
+import dotenv from 'dotenv';
 
-const stringConexion = 'mongodb+srv://dbkevin:dbkevin21@fanta-store.afzpo.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
+dotenv.config({path:'./.env'});
+
+const stringConexion = process.env.DATABASE_URL;
 
 const client = new MongoClient(stringConexion, {
     useNewUrlParser: true,
@@ -35,7 +38,7 @@ app.get('/productos', (req, res) => {
 
 app.post('/productos/nuevo', (req, res) => {
     const datosProducto = req.body;
-    //console.log('producto a crear: ', req.body) //me muestra la info del producto a crear
+    console.log('producto a crear: ', req.body) //me muestra la info del producto a crear
     console.log("llaves: ", Object.keys(datosProducto)); //me muestra las llaves del producto a crear
 
     try {
@@ -197,8 +200,8 @@ const main = () => {
         }
         conexion = db.db('productos');
         console.log('conexión éxitosa')
-        return app.listen(5000, () => {
-            console.log('escuchando puerto 5000')
+        return app.listen(process.env.PORT, () => {
+            console.log(`escuchando puerto ${process.env.PORT}`)
         });
     })
 }
