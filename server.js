@@ -4,27 +4,21 @@
 //'import' de express normal
 import Express from "express";
 import Cors from "cors"
-import {
-    MongoClient,
-    ObjectId
-} from "mongodb";
 import dotenv from 'dotenv';
+import {
+    conectarDB,
+    getDB
+} from './db/db.js'
 
-dotenv.config({path:'./.env'});
-
-const stringConexion = process.env.DATABASE_URL;
-
-const client = new MongoClient(stringConexion, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
+dotenv.config({
+    path: './.env'
 });
-
-let conexion;
 
 const app = Express()
 app.use(Express.json(), Cors());
 
 app.get('/productos', (req, res) => {
+    const conexion = getDB();
     conexion.collection('productos').find({}) /* .limit(50) */ .toArray((err, result) => { //liimt para tener solo 50 registros. find es la operacion
         if (err) {
             console.error(err);
@@ -48,6 +42,7 @@ app.post('/productos/nuevo', (req, res) => {
             Object.keys(datosProducto).includes('valorUnitario') &&
             Object.keys(datosProducto).includes('estado')) {
 
+            const conexion = getDB();
             conexion.collection('productos').insertOne(datosProducto, (err, result) => {
                 if (err) {
                     console.error(err);
@@ -74,7 +69,7 @@ app.patch('/productos/editar', (req, res) => {
     const operacion = {
         $set: edicion
     };
-
+    const conexion = getDB();
     conexion.collection('productos').findOneAndUpdate(filtroProducto, operacion, {
         upsert: true,
         returnOriginal: true
@@ -96,6 +91,7 @@ app.delete('/productos/eliminar', (req, res) => {
     };
     //delete edicion._id; //se usa cuando enviamos el id por el body o usamos el id por defecto de mongo
 
+    const conexion = getDB();
     conexion.collection('productos').deleteOne(filtroProducto, (err, result) => {
         if (err) {
             console.error('Error eliminado el producto', err);
@@ -108,6 +104,7 @@ app.delete('/productos/eliminar', (req, res) => {
 })
 
 app.get('/usuarios', (req, res) => {
+    const conexion = getDB();
     conexion.collection('usuarios').find({}) /* .limit(50) */ .toArray((err, result) => { //liimt para tener solo 50 registros. find es la operacion
         if (err) {
             console.error(err);
@@ -133,6 +130,7 @@ app.post('/usuarios/nuevo', (req, res) => {
             Object.keys(datosUsuario).includes('estadoUsuario') &&
             Object.keys(datosUsuario).includes('password')) {
 
+            const conexion = getDB();
             conexion.collection('usuarios').insertOne(datosUsuario, (err, result) => {
                 if (err) {
                     console.error(err);
@@ -160,6 +158,7 @@ app.patch('/usuarios/editar', (req, res) => {
         $set: edicion
     };
 
+    const conexion = getDB();
     conexion.collection('usuarios').findOneAndUpdate(filtroUsuario, operacion, {
         upsert: true,
         returnOriginal: true
@@ -181,6 +180,7 @@ app.delete('/usuarios/eliminar', (req, res) => {
     };
     //delete edicion._id; //se usa cuando enviamos el id por el body o usamos el id por defecto de mongo
 
+    const conexion = getDB();
     conexion.collection('usuarios').deleteOne(filtroUsuario, (err, result) => {
         if (err) {
             console.error('Error eliminado el usuario', err);
@@ -193,17 +193,9 @@ app.delete('/usuarios/eliminar', (req, res) => {
 })
 
 const main = () => {
-
-    client.connect((err, db) => {
-        if (err) {
-            console.error('Error conectando a la base de datos');
-        }
-        conexion = db.db('productos');
-        console.log('conexión éxitosa')
-        return app.listen(process.env.PORT, () => {
-            console.log(`escuchando puerto ${process.env.PORT}`)
-        });
-    })
+    return app.listen(process.env.PORT, () => {
+        console.log(`escuchando puerto ${process.env.PORT}`)
+    });
 }
 
-main();
+conectarDB(main)
