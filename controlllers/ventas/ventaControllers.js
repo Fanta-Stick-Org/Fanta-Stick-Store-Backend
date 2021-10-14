@@ -9,6 +9,8 @@ const queryGetVentas = async (callback) => {
 }
 
 const queryPostVentas = async (datosVenta, callback) => {
+    datosVenta.cantidad = parseInt(datosVenta.cantidad, 10)
+    console.log(datosVenta.cantidad)
     //console.log('venta a crear: ', req.body) //me muestra la info del venta a crear
     //console.log("llaves: ", Object.keys(datosVenta)); //me muestra las llaves del venta a crear
     if (

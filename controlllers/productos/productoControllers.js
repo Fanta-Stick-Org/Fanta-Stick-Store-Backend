@@ -9,6 +9,8 @@ const queryGetProductos = async (callback) => {
 }
 
 const queryPostProductos = async (datosProducto, callback) => {
+    datosProducto.valorUnitario = parseInt(datosProducto.valorUnitario, 10)
+    console.log(datosProducto.valorUnitario)
     //console.log('producto a crear: ', req.body) //me muestra la info del producto a crear
     //console.log("llaves: ", Object.keys(datosProducto)); //me muestra las llaves del producto a crear
     if (
