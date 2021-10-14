@@ -11,13 +11,14 @@ import {
 } from './db/db.js'
 import rutasProducto from "./views/productos/productoRutas.js";
 import rutasUsuario from "./views/usuarios/usuarioRutas.js";
+import rutasVenta from "./views/ventas/ventaRutas.js";
 
 dotenv.config({
     path: './.env'
 });
 
 const app = Express()
-app.use(Express.json(), Cors(), rutasProducto, rutasUsuario);
+app.use(Express.json(), Cors(), rutasProducto, rutasUsuario, rutasVenta);
 
 const main = () => {
     return app.listen(process.env.PORT, () => {
