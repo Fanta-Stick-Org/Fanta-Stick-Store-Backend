@@ -9,8 +9,6 @@ const queryGetVentas = async (callback) => {
 }
 
 const queryPostVentas = async (datosVenta, callback) => {
-    datosVenta.cantidad = parseInt(datosVenta.cantidad, 10)
-    console.log(datosVenta.cantidad)
     //console.log('venta a crear: ', req.body) //me muestra la info del venta a crear
     //console.log("llaves: ", Object.keys(datosVenta)); //me muestra las llaves del venta a crear
     if (
@@ -20,8 +18,8 @@ const queryPostVentas = async (datosVenta, callback) => {
         Object.keys(datosVenta).includes('estadoVenta') &&
         Object.keys(datosVenta).includes('idCliente') &&
         Object.keys(datosVenta).includes('nameCliente') &&
-        Object.keys(datosVenta).includes('descripcion') &&
-        Object.keys(datosVenta).includes('cantidad')) {
+        Object.keys(datosVenta).includes('productos') &&
+        Object.keys(datosVenta).includes('valorTotal')) {
 
         const conexion = getDB();
         await conexion.collection('ventas').insertOne(datosVenta, callback);
