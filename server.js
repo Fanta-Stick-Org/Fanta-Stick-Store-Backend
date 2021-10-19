@@ -35,7 +35,7 @@ const checkJwt = jwt({
     issuer: [`https://fanta-stick.us.auth0.com/`],
     algorithms: ['RS256']
 });
-
+//PASO 4 Y 5 > ENVIARLE EL TOKEN A AUTH0 PARA QUE DEVULVA SI ES VALIDO
 app.use(checkJwt)
 app.use(rutasProducto);
 app.use(rutasUsuario);

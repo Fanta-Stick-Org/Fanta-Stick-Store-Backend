@@ -1,6 +1,7 @@
-import Express from 'express'
+import Express, { response } from 'express'
 import {
     queryDeleteUsuarios,
+    queryGetOPostUsurio,
     queryGetUsuarios,
     queryPatchUsuarios,
     queryPostUsuarios
@@ -24,6 +25,11 @@ rutasUsuario.route('/usuarios').get((req, res) => {
 
 rutasUsuario.route('/usuarios').post((req, res) => {
     queryPostUsuarios(req.body, genericCallback(res));
+});
+
+rutasUsuario.route('/usuarios/self').get((req, res) => {
+    console.log('alguien hizo get a /usuarios/self')
+    queryGetOPostUsurio(req, genericCallback(res));
 });
 
 rutasUsuario.route('/usuarios/:id').patch((req, res) => {
