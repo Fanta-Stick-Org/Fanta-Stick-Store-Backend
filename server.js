@@ -6,15 +6,14 @@ import Express from "express";
 import Cors from "cors"
 import dotenv from 'dotenv';
 import {
-    conectarDB,
-    getDB
+    conectarDB
 } from './db/db.js'
 import jwt from "express-jwt";
-import jwtAuthz from "express-jwt-authz";
 import jwksRsa from "jwks-rsa";
 import rutasProducto from "./views/productos/productoRutas.js";
 import rutasUsuario from "./views/usuarios/usuarioRutas.js";
 import rutasVenta from "./views/ventas/ventaRutas.js";
+import authEstadoUsuario from "./middleware/authEstadoUsuario.js";
 
 dotenv.config({
     path: './.env'
@@ -36,7 +35,11 @@ const checkJwt = jwt({
     algorithms: ['RS256']
 });
 //PASO 4 Y 5 > ENVIARLE EL TOKEN A AUTH0 PARA QUE DEVULVA SI ES VALIDO
-app.use(checkJwt)
+app.use(checkJwt);
+
+//para verificar el estado del usuario. si es No autorizado, no puede hacer login
+app.use(authEstadoUsuario);
+
 app.use(rutasProducto);
 app.use(rutasUsuario);
 app.use(rutasVenta);

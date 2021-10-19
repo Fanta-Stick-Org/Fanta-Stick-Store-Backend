@@ -21,14 +21,12 @@ const queryGetOPostUsurio = async (req, callback) => {
     //PASO 6 > OBTENER LA INFO DEL USUARIO DESDE EL TOKEN
     const token = req.headers.authorization.split('Bearer ')[1];
     const user = jwt_decode(token)['http://localhost/userData'];
-    console.log(user);
 
     //PASO 6.1 > CONSULTAR EN LA DB SI EL USUARIO ESTA
     const conexion = getDB();
     await conexion.collection('usuarios').findOne({
         email: user.email
     }, async (err, response) => {
-        /* console.log("response db", response) */
 
         if (response) {
             //PASO 7.1 > SI EL USUARIO EXISTE EN DB, DEVULVE LA INFO    
