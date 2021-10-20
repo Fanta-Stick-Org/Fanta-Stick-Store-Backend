@@ -20,6 +20,7 @@ const authEstadoUsuario = async (req, res, next) => {
                 //Paso 4 > si el usuario es No autorizado devuelve un error de autenticacion
                 console.log('no habilitado')
                 res.sendStatus(401)
+                res.end();
             }
         }
         next();
