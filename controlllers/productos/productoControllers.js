@@ -1,7 +1,7 @@
 import {
     getDB
 } from '../../db/db.js'
-/* import { ObjectId } from 'mongodb'; */ //para obtener el id defecto de mongo
+import { ObjectId } from 'mongodb'; //para obtener el id defecto de mongo
 
 const queryGetProductos = async (callback) => {
     const conexion = getDB();
@@ -14,7 +14,6 @@ const queryPostProductos = async (datosProducto, callback) => {
     //console.log('producto a crear: ', req.body) //me muestra la info del producto a crear
     //console.log("llaves: ", Object.keys(datosProducto)); //me muestra las llaves del producto a crear
     if (
-        Object.keys(datosProducto).includes('_id') &&
         Object.keys(datosProducto).includes('descripcion') &&
         Object.keys(datosProducto).includes('valorUnitario') &&
         Object.keys(datosProducto).includes('estado')) {
@@ -26,11 +25,11 @@ const queryPostProductos = async (datosProducto, callback) => {
     }
 };
 
-const queryPatchProductos = async (id, edicion, /*  ,*/ callback) => {
+const queryPatchProductos = async (id, edicion, callback) => {
     const filtroProducto = {
-        _id: id //_id: new ObjectId(edicion.id) cuando es el id por defecto
+        _id: new ObjectId(id) //cuando es el id por defecto
     };
-    //delete edicion._id; //se usa cuando enviamos el id por el body o usamos el id por defecto de mongo
+    delete edicion._id; //se usa cuando enviamos el id por el body o usamos el id por defecto de mongo
     const operacion = {
         $set: edicion
     };
@@ -45,7 +44,7 @@ const queryPatchProductos = async (id, edicion, /*  ,*/ callback) => {
 
 const queryDeleteProductos = async (id, callback) => {
     const filtroProducto = {
-        _id: id //_id: new ObjectId(edicion.id) cuando es el id por defecto
+        _id: new ObjectId(id) //cuando es el id por defecto
     };
     //delete edicion._id;   //se usa cuando enviamos el id por el body o usamos el id por defecto de mongo
                             //esto no se hace si usamos rutas dinamicas con id en la url

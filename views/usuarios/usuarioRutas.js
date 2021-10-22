@@ -28,7 +28,6 @@ rutasUsuario.route('/usuarios').post((req, res) => {
 });
 
 rutasUsuario.route('/usuarios/self').get((req, res) => {
-    console.log('alguien hizo get a /usuarios/self')
     queryGetOPostUsurio(req, genericCallback(res));
 });
 

@@ -1,7 +1,7 @@
 import {
     getDB
 } from '../../db/db.js'
-/* import { ObjectId } from 'mongodb'; */ //para obtener el id defecto de mongo
+import { ObjectId } from 'mongodb'; //para obtener el id defecto de mongo
 
 const queryGetVentas = async (callback) => {
     const conexion = getDB();
@@ -11,28 +11,15 @@ const queryGetVentas = async (callback) => {
 const queryPostVentas = async (datosVenta, callback) => {
     //console.log('venta a crear: ', req.body) //me muestra la info del venta a crear
     //console.log("llaves: ", Object.keys(datosVenta)); //me muestra las llaves del venta a crear
-    if (
-        Object.keys(datosVenta).includes('_id') &&
-        Object.keys(datosVenta).includes('fechaVenta') &&
-        Object.keys(datosVenta).includes('vendedor') &&
-        Object.keys(datosVenta).includes('estadoVenta') &&
-        Object.keys(datosVenta).includes('idCliente') &&
-        Object.keys(datosVenta).includes('nameCliente') &&
-        Object.keys(datosVenta).includes('productos') &&
-        Object.keys(datosVenta).includes('valorTotal')) {
-
         const conexion = getDB();
         await conexion.collection('ventas').insertOne(datosVenta, callback);
-    } else {
-        return 'error';
-    }
 };
 
-const queryPatchVentas = async (id, edicion, /*  ,*/ callback) => {
+const queryPatchVentas = async (id, edicion, callback) => {
     const filtroVenta = {
-        _id: id //_id: new ObjectId(edicion.id) cuando es el id por defecto
+        _id: new ObjectId(id) //cuando es el id por defecto
     };
-    //delete edicion._id; //se usa cuando enviamos el id por el body o usamos el id por defecto de mongo
+    delete edicion._id; //se usa cuando enviamos el id por el body o usamos el id por defecto de mongo
     const operacion = {
         $set: edicion
     };
@@ -47,7 +34,7 @@ const queryPatchVentas = async (id, edicion, /*  ,*/ callback) => {
 
 const queryDeleteVentas = async (id, callback) => {
     const filtroVenta = {
-        _id: id //_id: new ObjectId(edicion.id) cuando es el id por defecto
+        _id: new ObjectId(id) //cuando es el id por defecto
     };
     //delete edicion._id;   //se usa cuando enviamos el id por el body o usamos el id por defecto de mongo
                             //esto no se hace si usamos rutas dinamicas con id en la url
