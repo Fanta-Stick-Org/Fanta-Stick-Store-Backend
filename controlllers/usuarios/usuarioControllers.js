@@ -14,7 +14,6 @@ const queryPostUsuarios = async (datosUsuario, callback) => {
     //console.log("llaves: ", Object.keys(datosUsuario)); //me muestra las llaves del producto a crear
         const conexion = getDB();
         await conexion.collection('usuarios').insertOne(datosUsuario, callback);
-    
 };
 
 const queryGetOPostUsurio = async (req, callback) => {
